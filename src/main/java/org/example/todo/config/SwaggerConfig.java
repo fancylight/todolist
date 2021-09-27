@@ -5,10 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 
 @EnableSwagger2
@@ -17,7 +21,18 @@ public class SwaggerConfig {
 
     @Bean
     public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+        return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo())
+                .securitySchemes(Collections.singletonList(HttpAuthenticationScheme.JWT_BEARER_BUILDER
+//                        显示用
+                        .name("JWT")
+                        .build()))
+                .securityContexts(Arrays.asList(SecurityContext.builder()
+                        .securityReferences(Arrays.asList(SecurityReference.builder()
+                                .reference("Authorization")
+                                .scopes(new AuthorizationScope[]{new AuthorizationScope("global", "accessEverything")})
+                                .build()))
+                        .build()))
+                .securitySchemes(Arrays.asList(new ApiKey("Authorization", "Authorization", "header")))
                 // 是否开启
                 .enable(true).select()
                 .apis(RequestHandlerSelectors.basePackage("org.example.todo.web.controller"))

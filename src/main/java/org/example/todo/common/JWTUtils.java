@@ -21,7 +21,7 @@ import static org.example.todo.common.exception.ExceptionEnums.USER_EXPIRED;
  **/
 public class JWTUtils {
     public static final String USER_ID = "userId";
-    private static String key = "token";
+    private static String key = "Authorization";
     private static String salt = "Secret";
     private static long expire = 1800L;
 
@@ -32,9 +32,7 @@ public class JWTUtils {
      */
     public static String generateToken(Long userId) {
         Date expireDate = new Date(System.currentTimeMillis() + expire * 1000);
-        Map<String,Object> map =new HashMap<>();
-        map.put(USER_ID, userId);
-        return Jwts.builder().setHeaderParam("typ", "JWT").setClaims(map).setExpiration(expireDate).signWith(SignatureAlgorithm.HS512, salt).compact();
+       return Jwts.builder().setExpiration(expireDate).claim(USER_ID, userId).signWith(SignatureAlgorithm.HS512, salt).compact();
     }
 
     /**
@@ -42,8 +40,8 @@ public class JWTUtils {
      * @param token
      */
     public static UserBO resolveToken(String token) {
-        Claims body = Jwts.parser().setSigningKey(salt).parseClaimsJwt(token).getBody();
-        Long id = (Long) body.get(USER_ID);
+        Claims body = Jwts.parser().setSigningKey(salt).parseClaimsJws(token).getBody();
+        Long id = Long.valueOf((Integer)body.get(USER_ID));
         if (body.getExpiration().before(new Date())) {
             UserContext.loginOut(id);
             throw new BusinessException(TOKEN_EXPIRED);

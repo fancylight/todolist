@@ -42,6 +42,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfoEnt
         if (!userInfoEntity.get().getPassword().equals(md5Password)) {
             throw new BusinessException(PASSWORD_ERROR);
         }
+        UserContext.loginUser(userInfoEntity.get().getId(),BeanUtils.transform(UserBO.class,userInfoEntity.get()));
         return BeanUtils.transform(UserInfo.class,userInfoEntity.get()).setToken(JWTUtils.generateToken(userInfoEntity.get().getId()));
     }
 

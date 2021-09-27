@@ -1,7 +1,7 @@
 package org.example.todo.web.controller;
 
 import org.example.todo.common.BeanUtils;
-import org.example.todo.common.annotion.NotTokenVerify;
+import org.example.todo.common.annotion.TokenVerify;
 import org.example.todo.domain.model.Result;
 import org.example.todo.domain.model.UserBO;
 import org.example.todo.domain.service.UserInfoService;
@@ -25,7 +25,6 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
     @PostMapping("login")
-    @NotTokenVerify
     public Result<UserInfo> loginIn(@Validated @RequestBody UserLoginRequest userLoginRequest) throws NoSuchAlgorithmException {
         return Result.success(userInfoService.login(BeanUtils.transform(UserBO.class,userLoginRequest)));
     }

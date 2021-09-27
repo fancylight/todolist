@@ -13,17 +13,17 @@ import java.util.Map;
  **/
 public class UserContext {
     private static ThreadLocal<UserBO> userBOThreadLocal = new ThreadLocal<>();
-    private static Map<String, UserBO> loginUser = new HashMap<>();
+    private static Map<Long, UserBO> loginUser = new HashMap<>();
 
     public static void set(UserBO userBO) {
         userBOThreadLocal.set(userBO);
     }
 
-    public static void get() {
-        userBOThreadLocal.get();
+    public static UserBO get() {
+        return userBOThreadLocal.get();
     }
 
-    public static void loginUser(String id, UserBO userBO) {
+    public static void loginUser(Long id, UserBO userBO) {
         loginUser.put(id, userBO);
     }
 

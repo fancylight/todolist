@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
+import org.example.todo.domain.enums.Status;
 
 /**
  * 
@@ -13,6 +15,7 @@ import lombok.Data;
  */
 @TableName(value ="todo_list")
 @Data
+@Accessors(chain = true)
 public class TodoListEntity implements Serializable {
     /**
      * 主键
@@ -43,7 +46,7 @@ public class TodoListEntity implements Serializable {
     /**
      * 完成状态,0:已完成;1:未完成
      */
-    private byte[] status;
+    private Status status;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
