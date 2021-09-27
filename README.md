@@ -22,3 +22,9 @@
 
 
 fork代码，自由发挥，将自己的仓库地址发给HR即可
+
+---
+简要说明:
+- swagger3入口为`swagger-ui/`,除登录登出接口其余接口需要token
+- 默认初始化脚本为`V1.0.0__init.sql`
+- 测试用例为`SimpleTest`
